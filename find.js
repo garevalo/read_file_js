@@ -8,6 +8,8 @@ const openFile = (event) => {
 
 	node.innerHTML = render_load();
 
+	//alert(document.getElementById('upper')) 
+
 	reader.onload = () => {
 
 	  let text = reader.result;
@@ -22,28 +24,32 @@ const openFile = (event) => {
   	  let ucFirst = firstWordToUpper(text_to_search.trim())
   	  let normal 	= text_to_search.trim()	
 
+  	  reg_search = new RegExp( text_to_search, "i" );
+
 	  for( let i = 0; i <  eachLine.length; i++ ) {
 	     
 	      if( 
-	      	eachLine[i].search( normal ) 	!= -1 ||
-	      	eachLine[i].search( upper ) 	!= -1 ||
-	      	eachLine[i].search( ucFirst )  	!= -1
+	      	reg_search.test(eachLine[i]) &&
+	      	eachLine[i].search( normal ) == -1
 	      	){
 
-	      	if(  eachLine[i].search( normal ) != -1 ){
-	      		output += render_output(i,eachLine[i],normal);
+	      	output += render_output(i,eachLine[i], getWordFromString(eachLine[i],normal) ,"primary");
+	      	countNormal++;
+	      	
+	      	/*if(  eachLine[i].search( normal ) != -1 ){
+	      		output += render_output(i,eachLine[i],normal,"primary");
 	      		countNormal++;
 	      	}
 	      	
 	      	if( eachLine[i].search( upper ) != -1 ){
-	      		output += render_output(i,eachLine[i],upper);
+	      		output += render_output(i,eachLine[i],upper,"danger");
 	      		countUpper++;
 	      	}
 
 	      	if( eachLine[i].search( ucFirst )  != -1 ){
-	      		output += render_output(i,eachLine[i],ucFirst);
+	      		output += render_output(i,eachLine[i],ucFirst,"warning");
 	      		countUcfirst++;
-	      	}
+	      	}*/
 			
 	      }
 	  }	
@@ -51,11 +57,7 @@ const openFile = (event) => {
 	  node.innerHTML = `${output} 
 	  					<hr>
 	  					<div class="row">  
-							<div class="mt-3 alert alert-primary"> Total <span class="font-weight-bold ">${normal}</span> :  <span class="font-weight-bold "> ${countNormal} </span> </div> 
-						 
-							<div class="mt-3 ml-2 alert alert-danger"> Total <span class="font-weight-bold ">${upper}</span> :  <span class="font-weight-bold "> ${countUpper} </span> </div> 
-						
-							<div class="mt-3 ml-2 alert alert-warning"> Total <span class="font-weight-bold ">${ucFirst}</span> :  <span class="font-weight-bold "> ${countUcfirst} </span> </div> 
+							<div class="mt-3 alert alert-danger"> <span class="font-weight-bold ">${normal}</span> :  <span class="font-weight-bold "> ${countNormal} </span> </div> 
 						</div>`;
 
 	};
@@ -93,12 +95,12 @@ const render_load = () => {
 }
 
 
-const render_output = (number,string,text) => {
-
+const render_output = (number,string,text,type) => {
+	regx = new RegExp(text, 'i')
 	return `<div class="row">
 				<code>
 					Line <span class="badge badge-pill badge-light">(${number+1})</span>: 
-					${string.replace(text, `<span class="font-weight-bold text-primary"> ${text}  </span>`) } 
+					${string.replace(regx, `<span class="font-weight-bold text-${ type }">${text}</span>`) } 
 				</code>
 			</div>`;
 
@@ -107,3 +109,14 @@ const render_output = (number,string,text) => {
 
 
 const firstWordToUpper = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+
+
+const equalsIgnoringCase = (text, other) => text.localeCompare(other, undefined, { sensitivity: 'base' }) === 0
+
+const getWordFromString = (string,text) => {
+  
+  regx = new RegExp(text, 'i')
+  //return string.slice( 0,10 )
+  return string.slice( string.search(regx),string.search(regx) + text.length )
+
+} 

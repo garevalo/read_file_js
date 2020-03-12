@@ -19,9 +19,31 @@
 			    <div class="form-group">	
 			    	<input type="text" name="text_to_search" placeholder="Texto a buscar" id="text_to_search" class="form-control">
 	    		</div>
+
+	    		<div class="form-group inline">
+	    			
+	    			<div class="custom-control custom-control-inline custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" id="lower" checked value="1">
+					  <label class="custom-control-label" for="lower">Minúsculas</label>
+					</div>
+
+					<div class="custom-control custom-control-inline custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" id="upper">
+					  <label class="custom-control-label" for="upper">Mayúsculas</label>
+					</div>
+
+					<div class="custom-control custom-control-inline custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" id="ucfirst">
+					  <label class="custom-control-label" for="ucfirst">Primer carácter en mayúscula</label>
+					</div>
+
+	    		</div>
+
 	    		<div class="form-group">
 					<button  class="btn btn-success" onclick="openFile(event)"><i class="fas fa-rocket"></i> Search </button>
 	    		</div>
+
+
 
     		</div>
 
